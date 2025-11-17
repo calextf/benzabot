@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BenzaBot: Orquestrador de Respostas Institucionais</title>
+    <link rel="stylesheet" href="style.css">
+    <base target="_top">
+</head>
+<body>
+
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="chatBotOverlay">
+        <div id="chatbotContainer" class="chatbot-container">
+            <div id="chatHomeButton" class="internal-nav-button" 
+                 onclick="closeChatBotAndGoHome()" 
+                 style="position: absolute; top: 15px; left: 15px; color: var(--color-primary-accent); z-index: 60;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.909 7.788A.5.5 0 0 0 1.273 8H2v7a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-4H11v4a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5V8h.727a.5.5 0 0 0 .364-.212L8.707 1.5z"/>
+                </svg>
+            </div>
+
+            <div class="chatbot-header">
+                BenzaBot
+            </div>
+            <div id="chatContent" class="chatbot-content">
+            </div>
+            <div class="chatbot-footer">
+                <div class="chatbot-input">
+                    <input type="text" id="chatInput" placeholder="Digite sua dúvida aqui..." onkeypress="if(event.keyCode == 13) simulateUserMessage()">
+                    <button type="button" id="sendButton" onclick="simulateUserMessage()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="menuToggle" onclick="toggleSidebar()">
+        <span class="hamburger-icon"></span>
+        <span class="hamburger-icon"></span>
+        <span class="hamburger-icon"></span>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <img src="https://drive.google.com/thumbnail?id=1SZalmkT2jX53_LYXMuGiVpLjPmNjWlxK&sz=w1000"
+                 alt="Logo da Secretaria Acadêmica Unicesumar"
+                 class="sidebar-logo">
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" onclick="openChatBot(); return false;">ChatBot</a>
+        </div>
+    </div>
+    
+    <div id="page1" class="page-container active" onclick="changePage(2)">
+        <div id="homeHeader">
+            <img src="https://drive.google.com/thumbnail?id=1F-gb-vUWTzlVIQyfqNOiIFsGPxc_j2d6&sz=w1000" 
+                 alt="Avatar do BenzaBot" 
+                 id="botImage">
+            <div id="titleContainer">
+                <h1 id="mainTitle" class="spooky-glow">BenzaBot</h1>
+                <p id="subtitleHome">Orquestrador de Respostas Institucionais</p>
+            </div>
+        </div>
+        <div style="margin-top: 30px;">
+            <p style="font-size: 1.1em; color: var(--color-vitru-info); font-weight: bold;">
+                CLIQUE PARA INICIAR O REGISTRO DE ATENDIMENTO
+            </p>
+        </div>
+    </div>
+
+    <div id="page2" class="page-container">
+        
+        <div id="homeButton" class="internal-nav-button" onclick="changePage(1)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.909 7.788A.5.5 0 0 0 1.273 8H2v7a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-4H11v4a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5V8h.727a.5.5 0 0 0 .364-.212L8.707 1.5z"/>
+            </svg>
+        </div>
+
+        <div id="benzaBotHeader" class="form-field">
+            <h2 id="benzaBotTitle" class="spooky-glow">BenzaBot</h2>
+        </div>
+        <p id="benzaBotSubtitle" class="form-field">A inteligência a serviço da sua rotina.</p>
+        
+        <div class="form-field">
+            <label for="protocolo">Protocolo<span class="required-star">*</span></label>
+            <input type="text" 
+                    id="protocolo" 
+                    placeholder="Ex: 202501-123456"
+                    oninput="filterProtocol(this)"
+                    inputmode="numeric" 
+                    pattern="\d*">
+        </div>
+        
+        <div class="form-field">
+            <label for="perguntaAluno">Pergunta do Aluno(a)<span class="required-star">*</span></label>
+            <textarea id="perguntaAluno" rows="4" placeholder="Ex: Qual o prazo para solicitação de revisão de nota?"></textarea>
+        </div>
+        
+       <div class="form-field">
+    <label for="tags">Tags (Opcional, separadas por vírgulas)</label>
+    
+    <input type="text" id="tags" placeholder="Ex: revisão, nota, prazo" list="listaTags" multiple autocomplete="off">
+    
+    <datalist id="listaTags">
+        <option value="HistoricoAtivo">
+        <option value="DeclaracaoENADE">
+        <option value="DiplomaEnviado">
+        </datalist>
+    </div>
+
+        <div class="form-field">
+            <label for="sazonalidade">Sazonalidade</label>
+            <input type="text" id="sazonalidade" placeholder="Ex: final_de_semestre, período_de_provas">
+        </div>
+
+        <div class="form-field">
+            <label for="tom">Tom</label>
+            <input type="text" id="tom" placeholder="Ex: educado, formal, urgente">
+        </div>
+
+       <div class="form-field">
+            <label for="equipe">Equipes (Separadas por vírgulas)</label>
+            <input type="text" id="equipe" placeholder="Ex: EMISSAO, VALIDACAO" list="listaEquipes" multiple autocomplete="off">
+            
+            <datalist id="listaEquipes">
+                <option value="EMISSAO">
+                <option value="VALIDACAO">
+                <option value="INGRESSO">
+                <option value="EDUCACAO_CONTINUADA">
+            </datalist>
+        </div>
+        
+        <button type="button" onclick="loadAndChangePage(3)" class="form-field">Gerar Resposta</button>
+    </div>
+
+    <div id="page3" class="page-container">
+        
+        <button type="button" id="backToFormButton" class="internal-nav-button" onclick="changePage(2)">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7 7-7m7 7H3" />
+            </svg>
+        </button>
+        
+        <h2 class="spooky-glow">Resposta Estilizada. ✅</h2>
+        
+        <div id="responseBox">
+            Aguardando o processamento...
+        </div>
+
+        <div style="display: flex; justify-content: center; position: relative;">
+            <button type="button" id="copyButton" onclick="copyResponse()">COPIAR RESPOSTA</button>
+            <div id="copyMessage">Texto Copiado!</div>
+        </div>
+
+        <h3 style="margin-top: 30px; margin-bottom: 10px; font-weight: bold; color: var(--color-light-text);">Qual a qualidade da resposta?</h3>
+        <div id="starContainer" 
+             style="display: flex; justify-content: center; gap: 5px;">
+        </div>
+        
+    </div>
+
+    <div class="footer-signature">
+        <span id="typewriter-text">© Formulário Desenvolvido por Vitor de Souza Jorge Capoia | Desenvolvimento e Qualidade | Secretaria Acadêmica Unicesumar</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
