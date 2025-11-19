@@ -1,187 +1,148 @@
-/* --- VARIÁVEIS DE TEMA INSTITUCIONAL DARK (ATUALIZADAS) --- */
+/* --- VARIÁVEIS DE TEMA INSTITUCIONAL LIGHT (PALETA CORPORATIVA) --- */
 :root {
-    /* Novas Cores */
-    --color-dark-background: #1A1A2E; /* Fundo Principal Escuro (Deep Navy) */
-    --color-dark-card: #3A3F62; /* Fundo de Cards e Campos (Contraste Escuro) */
-    --color-vitru-info: #0DCAF0; /* Acento Neon/Glow (Ciano Claro) */
-    --color-light-text: #D0D0D0; /* Texto Secundário sobre Fundo Escuro */
-    
-    /* Mapeamento das Cores Antigas para as Novas Variáveis */
-    --color-dark-base: var(--color-dark-background); 
-    --color-primary-accent: var(--color-vitru-info); /* O Ciano Acento agora é o #0DCAF0 */
-    --color-secondary-accent: var(--color-dark-card); /* O Cinza Azulado Escuro agora é o #3A3F62 */
-    --color-button-primary: var(--color-vitru-info); 
-    --color-button-hover: #0a9bc4; /* Versão mais escura do #0DCAF0 para hover */
-    --color-text-light: #FFFFFF; /* Texto Principal Branco */
-    
-    /* --- NOVAS VARIÁVEIS PARA ASSINATURA (REMOVIDA A ANIMAÇÃO) --- */
-    --typewriter-signature: "© Formulário Desenvolvido por Vitor de Souza Jorge Capoia | Desenvolvimento e Qualidade | Secretaria Acadêmica Unicesumar";
-    /* Variáveis de animação removidas */
+    /* Paleta Solicitada */
+    --color-primary: #007BFF;         /* Botões, Títulos, Destaques (AZUL) */
+    --color-primary-dark: #0056B3;    /* Hover, Textos de Ênfase (AZUL ESCURO) */
+    --color-background: #F8F9FA;      /* Fundo da Página (CINZA CLARO) */
+    --color-card-bg: #FFFFFF;         /* Fundo dos Cards/Inputs (BRANCO) */
+    --color-hover-bg: #E6F7FF;        /* Fundo Secundário/Hover (AZUL BEM CLARO) */
+    --color-border: #CED4DA;          /* Bordas (CINZA MÉDIO) */
+    --color-text-main: #212529;       /* Texto Principal (QUASE PRETO) */
+    --color-text-light: #6C757D;      /* Texto Secundário/Placeholder (CINZA ESCURO) */
+    --color-success: #20C997;         /* Indicadores de Sucesso (VERDE) */
+    --color-warning: #FD7E14;         /* Alertas (LARANJA) */
+
+    /* Mapeamento Funcional e Sombras */
+    --shadow-card: 0 4px 12px rgba(0, 123, 255, 0.15); /* Sombra suave azulada */
+    --shadow-hover: 0 8px 24px rgba(0, 123, 255, 0.25);
 }
 /* --- FIM VARIÁVEIS DE TEMA --- */
 
-/* --- BACKGROUND ANIMADO --- */
-/* Animação para movimentar o fundo muito lentamente */
+/* --- BACKGROUND ANIMADO (VERSÃO LIGHT) --- */
 @keyframes subtleScroll {
     0% { background-position: 0 0; }
-    100% { background-position: 600px 600px; } /* Deslocamento suave e infinito */
+    100% { background-position: 600px 600px; }
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* VOLTANDO A ROLAGEM NORMAL: min-height em vez de height e margin top/bottom */
-    min-height: 100vh; 
+    min-height: 100vh;
     margin: 0;
-    color: var(--color-text-light);
-    
-    /* Cor de fundo principal escura */
-    background-color: var(--color-dark-background); /* USANDO A NOVA VARIÁVEL */
+    color: var(--color-text-main); /* Texto Principal */
+    background-color: var(--color-background); /* Fundo da Página */
 
-    /* Padrão Geométrico Sutil - Retorna ao azul sutil */
+    /* Padrão Geométrico Sutil em Azul Claro */
     background-image:
-        /* Usando a nova cor de acento Ciano Claro (#0DCAF0) */
-        repeating-linear-gradient(45deg, rgba(13, 202, 240, 0.05) 0px, rgba(13, 202, 240, 0.05) 1px, transparent 1px, transparent 100px),
-        repeating-linear-gradient(-45deg, rgba(13, 202, 240, 0.05) 0px, rgba(13, 202, 240, 0.05) 1px, transparent 1px, transparent 100px);
+        repeating-linear-gradient(45deg, rgba(0, 123, 255, 0.03) 0px, rgba(0, 123, 255, 0.03) 1px, transparent 1px, transparent 100px),
+        repeating-linear-gradient(-45deg, rgba(0, 123, 255, 0.03) 0px, rgba(0, 123, 255, 0.03) 1px, transparent 1px, transparent 100px);
 
-    background-size: 600px 600px; 
+    background-size: 600px 600px;
     animation: subtleScroll 120s linear infinite;
 }
 
-/* Efeito de brilho removido, mas mantendo a classe se o usuário quiser reintroduzir */
+/* Efeito de brilho removido (mantido apenas para compatibilidade) */
 .spooky-glow {
-    text-shadow: 0 0 4px var(--color-primary-accent);
+    text-shadow: none;
+    color: var(--color-primary);
 }
 
-/* Estilo dos containers de página - Glassmorphism Institucional */
+/* Estilo dos containers de página - Clean Card Style */
 .page-container {
     display: none;
     text-align: center;
-    padding: 30px 40px;
-    /* Usando a cor do card (Contraste Escuro) */
-    background-color: rgba(58, 63, 98, 0.3); 
-    backdrop-filter: blur(8px);
-    /* Usando o Acento Ciano Claro */
-    border: 1px solid rgba(13, 202, 240, 0.4); 
+    padding: 30px 40px; 
+    background-color: var(--color-card-bg); /* Fundo Branco */
+
+    /* Bordas e Sombras Corporativas */
+    border: 1px solid var(--color-border);
     border-radius: 12px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+    box-shadow: var(--shadow-card);
+    
     max-width: 500px;
     width: 90%;
-    color: var(--color-text-light);
+    color: var(--color-text-main);
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.98);
     z-index: 10;
-    position: relative; 
-    margin: 50px 0 100px 0; 
-    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    position: relative;
+    margin: 50px 0 100px 0;
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out, box-shadow 0.3s;
 }
 
-/* Classe de entrada da página com animação */
 .page-container.active {
     display: block;
     opacity: 1;
     transform: scale(1);
 }
 
-/* --- NOVO: Estilos da Home (Page 1) - O container principal agora é o botão --- */
+/* Hover na Home */
 #page1 {
-    cursor: pointer; /* Torna todo o container clicável */
-    /* O transition já existe em .page-container, mas garantimos o do hover */
-}
-#page1:hover {
-    transform: scale(1.03); /* Efeito de escala no hover */
-    /* Usando o Acento Ciano Claro */
-    box-shadow: 0 0 30px rgba(13, 202, 240, 0.5); 
+    cursor: pointer;
 }
 
-/* --- ESTILOS: ÍCONE DE CASINHA (HOME) E BOTÃO DE VOLTAR PÁGINA 3 --- */
-/* Estilo base para os botões de navegação interna (Home na Page 2 e Voltar na Page 3) */
+#page1:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-primary);
+}
+
+/* --- BOTÕES DE NAVEGAÇÃO INTERNA --- */
 .internal-nav-button {
     position: absolute;
-    top: 10px; 
+    top: 15px;
     cursor: pointer;
     padding: 8px;
     border-radius: 50%;
     transition: background-color 0.2s;
     line-height: 0;
     z-index: 15;
-    display: flex; 
+    display: flex;
     align-items: center;
     justify-content: center;
-    stroke: currentColor; 
+    color: var(--color-primary);
 }
 
 .internal-nav-button:hover {
-    /* Usando o Acento Ciano Claro Transparente */
-    background-color: rgba(13, 202, 240, 0.2); 
+    background-color: var(--color-hover-bg);
 }
 
-/* Estilo específico para o ícone de Home (Page 2) */
-#homeButton {
-    left: 15px; /* Canto superior esquerdo */
-}
+#homeButton { left: 15px; }
+#homeButton svg { width: 22px; height: 22px; fill: var(--color-primary); }
 
-#homeButton svg {
-    width: 20px;
-    height: 20px;
-    fill: var(--color-primary-accent); /* Ciano Claro */
-}
-
-/* ESTILO PARA O BOTÃO VOLTAR NA PÁGINA 3 (Seta de tamanho aumentado) */
 #backToFormButton {
-    left: 15px; 
-    border-radius: 50%; 
-    width: 40px; 
-    height: 40px; 
-    padding: 8px; 
-    /* Usando o Acento Ciano Claro Transparente */
-    background-color: rgba(13, 202, 240, 0.1); 
-    color: var(--color-primary-accent); /* Ciano Claro */
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    color: var(--color-primary);
+    padding: 8px;
 }
 
 #backToFormButton:hover {
-    /* Usando o Acento Ciano Claro Transparente */
-    background-color: rgba(13, 202, 240, 0.2);
-    color: var(--color-text-light);
+    background-color: var(--color-hover-bg);
 }
-/* ----------------------------------------------- */
 
-/* ------------------------------------------- */
-/* --- ANIMAÇÕES PARA OS TÓPICOS (MANTIDAS) --- */
-/* ------------------------------------------- */
-
+/* --- ANIMAÇÕES (Mantidas e Alinhadas) --- */
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideOut {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(20px); }
 }
 
-/* CHAVE: Estilo para fazer o botão fixo sumir */
 .fade-out {
     opacity: 0 !important;
     transition: opacity 0.5s ease-in-out;
 }
-/* Apenas o form-field tem a animação de slideIn */
+
 .form-field {
-    opacity: 0; 
+    opacity: 0;
     animation: slideIn 0.5s forwards;
 }
 
@@ -189,454 +150,392 @@ body {
     opacity: 1;
     animation: slideOut 0.5s forwards;
 }
-/* --- NOVOS ESTILOS HOME PAGE 1 --- */
+
+/* Atrasos de animação */
+.form-field:nth-child(1) { animation-delay: 0.1s; }
+.form-field:nth-child(2) { animation-delay: 0.15s; }
+.form-field:nth-child(3) { animation-delay: 0.2s; }
+.form-field:nth-child(4) { animation-delay: 0.3s; }
+.form-field:nth-child(5) { animation-delay: 0.4s; }
+.form-field:nth-child(6) { animation-delay: 0.5s; }
+.form-field:nth-child(7) { animation-delay: 0.6s; }
+.form-field:nth-child(8) { animation-delay: 0.7s; }
+.form-field:nth-child(9) { animation-delay: 0.8s; }
+
+/* --- TYPOGRAPHY e HEADERS --- */
+h1, h2 { color: var(--color-primary); font-weight: 700; }
 
 #homeHeader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 5px;
-    text-align: left;
+    display: flex; align-items: center; justify-content: center;
+    gap: 15px; margin-bottom: 5px; text-align: left;
 }
 
 #botImage {
-    width: 100px; 
-    height: 100px; 
-    border-radius: 8px;
+    width: 100px; height: 100px; border-radius: 8px; /* Ajustado para card style */
     object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-#titleContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
+#titleContainer { display: flex; flex-direction: column; align-items: flex-start; }
 
-#mainTitle {
-    margin: 0;
-    font-size: 2em;
-    color: var(--color-primary-accent); /* Ciano Claro */
-}
+#mainTitle { margin: 0; font-size: 2em; letter-spacing: -1px; }
 
 #subtitleHome {
-    color: var(--color-light-text); /* Texto Secundário */
-    margin: 0;
-    font-size: 1em;
-    font-style: italic;
+    color: var(--color-text-light); margin: 0; /* Ajuste de margin */
+    font-size: 1em; font-weight: 500; font-style: italic; /* Ajuste de estilo */
 }
 
-/* Atraso sequencial da animação */
-.form-field:nth-child(1) { animation-delay: 0.1s; } /* benzaBotHeader */
-.form-field:nth-child(2) { animation-delay: 0.15s; } /* benzaBotSubtitle */
-.form-field:nth-child(3) { animation-delay: 0.2s; } /* Protocolo */
-.form-field:nth-child(4) { animation-delay: 0.3s; } /* Pergunta do Aluno */
-.form-field:nth-child(5) { animation-delay: 0.4s; } /* Tags */
-.form-field:nth-child(6) { animation-delay: 0.5s; } /* Sazonalidade */
-.form-field:nth-child(7) { animation-delay: 0.6s; } /* Tom */
-.form-field:nth-child(8) { animation-delay: 0.7s; } /* Equipe */
-.form-field:nth-child(9) { animation-delay: 0.8s; } /* Botão Gerar Resposta */
+#benzaBotHeader { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
+#benzaBotTitle { margin: 0; font-size: 2em; color: var(--color-primary); }
+#benzaBotSubtitle { color: var(--color-text-light); margin: 0 0 20px 0; font-size: 1em; font-style: italic; }
 
-h1, h2 {
-    color: var(--color-primary-accent);
-}
-
-/* Estilo para o BenzaBot e o Reset */
-#benzaBotHeader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 5px;
-}
-
-#benzaBotTitle {
-    color: var(--color-primary-accent);
-    margin: 0;
-    font-size: 2em;
-}
-
-#benzaBotSubtitle {
-    color: var(--color-light-text); /* Texto Secundário */
-    margin: 0 0 20px 0;
-    font-size: 1em;
-    font-style: italic;
-}
-
-/* --- Estilo para o asterisco obrigatório --- */
 .required-star {
-    color: var(--color-primary-accent); /* Ciano Claro */
+    color: var(--color-warning); /* Laranja para destaque */
     font-size: 1.2em;
     margin-left: 3px;
     vertical-align: top;
 }
 
-/* Estilos para botões principais */
-button {
-    padding: 12px 25px;
-    font-size: 16px;
-    font-weight: bold;
-    /* Texto Escuro/Preto no botão Ciano Claro */
-    color: var(--color-dark-background); 
-    background-color: var(--color-button-primary); /* Ciano Claro */
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s, transform 0.1s;
+/* --- INPUTS & FORM ELEMENTS --- */
+label {
+    display: block; text-align: left; font-weight: 600;
+    margin-bottom: 5px; color: var(--color-text-main); font-size: 0.9em;
 }
 
-button:hover {
-    background-color: var(--color-button-hover); /* Ciano Escuro no hover */
-}
-
-button:active {
-    transform: scale(0.98);
-}
-
-/* Estilos COMUNS para todos os inputs de formulário */
 input[type="text"], textarea, select {
     width: 100%;
-    padding: 10px;
-    margin: 8px 0 15px 0;
+    padding: 10px; /* Ajustado */
+    margin: 8px 0 15px 0; /* Ajustado */
     display: inline-block;
-    /* Usando a cor do card */
-    border: 1px solid var(--color-dark-card); 
-    border-radius: 4px;
+    
+    background-color: var(--color-card-bg); /* Branco */
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
     box-sizing: border-box;
-    font-size: 14px;
-    /* Fundo um pouco mais escuro */
-    background-color: rgba(0, 0, 0, 0.5); 
-    color: var(--color-text-light);
+    
+    color: var(--color-text-main);
+    font-size: 14px; /* Ajustado */
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-/* Estilos ESPECÍFICOS para o SELECT (com seta para baixo) */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+input::placeholder, textarea::placeholder { color: var(--color-text-light); }
+
+textarea { resize: vertical; min-height: 100px; font-family: inherit; }
+
+/* SELECT Customizado (Seta Azul) */
 select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    /* Adiciona a seta personalizada via background-image - Cor branca mantida */
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592c.860 0 1.320 1.013.754 1.658l-4.796 5.482a1 1 0 0 1-1.506 0z"/></svg>');
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    /* Imagem da Seta com a cor principal */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23007BFF" class="bi bi-caret-down-fill" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592c.860 0 1.320 1.013.754 1.658l-4.796 5.482a1 1 0 0 1-1.506 0z"/></svg>');
     background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 16px;
-    padding-right: 30px; 
+    background-position: right 10px center; /* Ajustado */
+    background-size: 16px; /* Ajustado */
+    padding-right: 30px; /* Ajustado */
 }
 
-/* Estilo para o placeholder/primeira opção (cor mais clara) */
+/* Estilo para o placeholder/primeira opção */
 #equipe option:first-child {
-    color: var(--color-light-text); /* Usando o D0D0D0 */
+    color: var(--color-text-light);
 }
 #equipe option[disabled] {
     display: none;
 }
 
-
-/* Estilo para as opções do select (ajustando a cor de fundo para escuro) */
 select option {
-    background: var(--color-dark-card); /* Cor de Card */
-    color: var(--color-text-light);
+    background: var(--color-card-bg);
+    color: var(--color-text-main);
+    padding: 10px;
 }
 
-input[type="text"]::placeholder, textarea::placeholder {
-    color: var(--color-light-text); /* Usando o D0D0D0 */
-}
-
-
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-
-label {
-    display: block;
-    text-align: left;
+/* --- BOTÕES --- */
+button {
+    padding: 12px 25px;
+    font-size: 16px;
     font-weight: bold;
-    margin-bottom: 5px;
+    color: #FFFFFF; /* Texto Branco */
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 8px; /* Ajustado */
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s, transform 0.1s;
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.2);
 }
-/* --- ESTILOS DA CAIXA DE RESPOSTA (PÁGINA 3) --- */
-/* --- ESTILOS DA CAIXA DE RESPOSTA (PÁGINA 3) --- */
+
+button:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+}
+
+button:active { transform: translateY(0); }
+
+/* --- PAGE 3: RESULTADO --- */
 #responseBox {
     text-align: left;
-    padding: 15px;
-    /* Usando Acento Ciano Claro Pontilhado */
-    border: 2px dashed var(--color-primary-accent); 
-    border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.4); 
-    margin-top: 20px;
+    padding: 15px; /* Ajustado */
     
-    /* --- CORREÇÃO DO TEXTO CORTADO --- */
-    white-space: pre-wrap; /* Mantém parágrafos e quebras de linha */
-    max-height: 400px;     /* Define altura máxima */
-    overflow-y: auto;      /* Adiciona rolagem se o texto for maior que a altura */
-    word-wrap: break-word; /* Quebra palavras longas para não estourar */
-    font-size: 14px;       /* Garante legibilidade */
-    line-height: 1.5;      /* Espaçamento entre linhas */
+    background-color: #F8F9FA; /* Fundo cinza claro */
+    border: 2px dashed var(--color-primary); /* Pontilhado Azul */
+    border-radius: 8px; /* Ajustado */
+    
+    margin-top: 20px;
+    white-space: pre-wrap; /* CORREÇÃO: Mantém parágrafos e quebras */
+    max-height: 400px;
+    overflow-y: auto;
+    word-wrap: break-word; /* CORREÇÃO: Quebra palavras longas */
+    font-size: 14px; /* Ajustado */
+    line-height: 1.5; /* Ajustado */
+    color: var(--color-text-main);
 }
 
-/* NOVO: Estilos do Botão COPIAR na Page 3 */
 #copyButton {
     padding: 8px 15px;
     font-size: 14px;
     margin-top: 10px;
-    background-color: var(--color-primary-accent); /* Ciano Claro */
-    color: var(--color-dark-background); /* Texto Escuro */
+    background-color: var(--color-primary);
+    color: #FFFFFF;
     font-weight: bold;
-    transition: background-color 0.2s, transform 0.1s;
-}
-#copyButton:hover {
-    background-color: var(--color-button-hover); /* Ciano Escuro */
+    border: none;
+    box-shadow: none;
+    transform: none;
+    border-radius: 6px;
 }
 
-/* NOVO: Mensagem de Cópia */
+#copyButton:hover {
+    background-color: var(--color-primary-dark);
+    color: #FFFFFF;
+    transform: none;
+}
+
 #copyMessage {
     position: absolute;
     right: 50%;
-    transform: translate(50%, -100%); 
+    transform: translate(50%, -100%);
     top: 0;
     padding: 8px 15px;
-    /* Cor de Card */
-    background-color: var(--color-dark-card); 
-    color: var(--color-light-text);
+    background-color: var(--color-text-main);
+    color: #FFF;
     border-radius: 4px;
-    opacity: 0; 
+    opacity: 0;
     transition: opacity 0.5s ease-out;
-    pointer-events: none; 
-    z-index: 20;
-    font-size: 14px;
-    white-space: nowrap;
+    pointer-events: none; z-index: 20;
+    font-size: 12px; white-space: nowrap;
 }
 
-/* ---------------------------------------------------- */
-/* --- ESTILOS DAS ESTRELAS --- */
-/* ---------------------------------------------------- */
+/* --- ESTRELAS DE FEEDBACK (CORRIGIDO) --- */
+
+/* Container das estrelas: Garante que fique acima de mensagens de erro ou botões próximos */
+#starContainer {
+    position: relative;
+    z-index: 50; 
+}
+
 .star-icon {
-    width: 30px;
-    height: 30px;
-    color: var(--color-light-text); /* COR D0D0D0 (Vazio) */
+    width: 35px; /* Aumentei levemente para facilitar o toque/clique */
+    height: 35px;
+    color: var(--color-border); /* Cor cinza quando vazia */
     stroke: none;
     cursor: pointer;
-    transition: color 0.2s; 
+    transition: color 0.2s, transform 0.1s;
     padding: 2px;
+    
+    /* --- CORREÇÃO DO CLIQUE --- */
+    pointer-events: all; /* Garante que o SVG capture o clique */
 }
 
-/* COR PREENCHIDA: Ciano Claro */
+/* Garante que o clique atravesse o desenho interno e vá para o ícone */
+.star-icon path {
+    pointer-events: none; 
+}
+
+/* Efeito de Hover (Feedback visual antes de clicar) */
+.star-icon:hover { 
+    transform: scale(1.2); 
+    color: #FFD700; /* Amarelo claro no hover */
+}
+
+/* Classe aplicada pelo Javascript ao clicar */
 .star-filled {
-    color: var(--color-primary-accent); 
-}
-/* FIM: Estilos de Feedback */
-
-
-/* Assinatura de Rodapé (Fixo em todas as telas) */
-.footer-signature {
-    position: fixed;
-    bottom: 10px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    /* Cor de texto secundário */
-    color: var(--color-light-text); 
-    font-size: 12px;
-    z-index: 5;
-    padding: 5px 0;
+    color: #FFC107 !important; /* Amarelo Ouro (Força a cor com !important) */
+    stroke: #FFC107;
 }
 
-/* --- ANIMAÇÃO TYPEWRITER REMOVIDA --- */
-.typewriter-effect {
-    /* Estilos de animação e overflow foram removidos, 
-       pois o texto agora é fixo e visível. */
-    display: inline-block; 
+#feedbackMessage { 
+    color: var(--color-success); 
+    font-weight: bold; 
+    margin-top: 10px;
 }
 
-/* ESTILOS DO MENU HAMBÚRGUER E SIDEBAR - MUDANÇAS DE COR */
-
+/* --- MENU SIDEBAR --- */
 #menuToggle {
-    position: fixed;
-    top: 25px;
-    left: 25px;
-    z-index: 50;
-    cursor: pointer;
-    /* Usando a cor do card transparente */
-    padding: 10px;
-    background: rgba(58, 63, 98, 0.3); 
+    position: fixed; top: 25px; left: 25px; z-index: 50;
+    cursor: pointer; padding: 10px;
+    background: var(--color-card-bg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     border-radius: 50%;
-    transition: background 0.3s;
+    transition: all 0.3s;
 }
-#menuToggle:hover {
-    background: rgba(58, 63, 98, 0.45);
-}
+#menuToggle:hover { background-color: var(--color-hover-bg); }
+
 .hamburger-icon {
-    width: 20px;
-    height: 2px;
-    background: var(--color-text-light);
-    display: block;
-    margin: 4px 0;
+    width: 20px; height: 2px; background: var(--color-text-main);
+    display: block; margin: 4px 0;
     transition: all 0.3s ease;
 }
+
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 280px;
-    background-color: var(--color-dark-background); /* Azul Escuro do tema */
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.7);
-    transform: translateX(-100%); 
-    transition: transform 0.3s ease-in-out;
-    z-index: 40;
-    display: flex;
-    flex-direction: column;
+    position: fixed; top: 0; left: 0; height: 100%; width: 280px;
+    background-color: var(--color-card-bg);
+    box-shadow: 4px 0 15px rgba(0,0,0,0.05);
+    transform: translateX(-100%); transition: transform 0.3s ease-in-out;
+    z-index: 40; display: flex; flex-direction: column;
 }
-.sidebar.open {
-    transform: translateX(0);
-}
+
+.sidebar.open { transform: translateX(0); }
+
 .sidebar-header {
-    text-align: center;
-    padding: 40px 0 25px 0; 
+    text-align: center; padding: 40px 0 25px 0;
     margin-bottom: 20px;
-    /* Usando Acento Ciano Claro Transparente */
-    border-bottom: 1px solid rgba(13, 202, 240, 0.3); 
-    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-border);
 }
+
 .sidebar-logo {
-    max-width: 200px; 
+    max-width: 200px;
     height: auto;
     border-radius: 8px;
 }
+
 .sidebar-menu a {
-    display: block;
-    padding: 15px 30px;
-    color: var(--color-text-light);
-    text-decoration: none;
-    font-weight: 500;
-    transition: background-color 0.3s, color 0.3s;
-    /* Usando Acento Ciano Claro Transparente */
-    border-bottom: 1px solid rgba(13, 202, 240, 0.1); 
-}
-.sidebar-menu a:hover {
-    background-color: var(--color-dark-card); /* Cor de Card no hover */
-    color: var(--color-primary-accent); /* Ciano Claro no hover */
+    display: block; padding: 15px 30px;
+    color: var(--color-text-main); text-decoration: none; font-weight: 600;
+    border-left: 4px solid transparent; transition: all 0.2s;
+    border-bottom: 1px solid rgba(206, 212, 218, 0.5); /* Borda sutil */
 }
 
-/* Estilos do Loading Overlay */
+.sidebar-menu a:hover {
+    background-color: var(--color-hover-bg);
+    color: var(--color-primary);
+    border-left-color: var(--color-primary);
+}
+
+/* --- LOADING & FOOTER (CORREÇÃO DO ERRO VISUAL) --- */
 #loadingOverlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8); /* Fundo mais escuro */
-    backdrop-filter: blur(5px); 
-    display: none; 
+    z-index: 1000;
+    display: none; /* GARANTE QUE ELE COMEÇA INVISÍVEL */
     justify-content: center;
     align-items: center;
-    z-index: 1000; 
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
 }
 
 .spinner {
-    /* Ciano Claro Transparente */
-    border: 8px solid rgba(13, 202, 240, 0.3); 
-    /* Ciano Claro */
-    border-top: 8px solid var(--color-primary-accent); 
+    border: 8px solid rgba(0, 123, 255, 0.3); /* Azul transparente */
+    border-top: 8px solid var(--color-primary); /* Azul sólido */
     border-radius: 50%;
     width: 60px;
     height: 60px;
     animation: spin 1s linear infinite;
 }
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-/* --- CHATBOT MODAL OVERLAY --- */
-#chatBotOverlay {
+.footer-signature {
     position: fixed;
-    top: 0;
+    bottom: 10px;
     left: 0;
     width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* Mais opaco */
-    backdrop-filter: blur(8px); 
-    display: none; 
-    justify-content: center;
-    align-items: center;
-    z-index: 90; 
+    text-align: center;
+    color: var(--color-text-light); /* Texto secundário */
+    font-size: 12px;
+    z-index: 5;
+    padding: 5px 0;
 }
 
-/* ANIMAÇÃO DE ENTRADA DO CHAT (MANTIDA) */
+.typewriter-effect {
+    display: inline-block;
+}
+
+/* --- CHATBOT (Light Mode) --- */
+#chatBotOverlay {
+    background: rgba(33, 37, 41, 0.6); /* Backdrop escuro translúcido */
+    backdrop-filter: blur(4px);
+}
+
 @keyframes slideInFromBottom {
     from { transform: translateY(100vh); }
     to { transform: translateY(0); }
 }
 
 .chatbot-container {
-    background-color: var(--color-dark-background); /* Azul Escuro */
+    background-color: var(--color-card-bg);
     border-radius: 15px;
-    /* Sombra Ciano Claro */
-    box-shadow: 0 10px 40px rgba(13, 202, 240, 0.4); 
+    box-shadow: 0 10px 40px rgba(0, 123, 255, 0.3); /* Sombra azulada */
     width: 90%;
     max-width: 450px;
-    height: 80%; 
+    height: 80%;
     padding: 20px;
     display: flex;
     flex-direction: column;
     transform: translateY(100vh);
-    transition: transform 0.5s ease-out; 
-    position: relative; 
+    transition: transform 0.5s ease-out;
+    position: relative;
 }
 
-.chatbot-container.active {
-    transform: translateY(0); 
-}
+.chatbot-container.active { transform: translateY(0); }
 
 .chatbot-header {
-    color: var(--color-primary-accent); /* Ciano Claro */
+    color: var(--color-primary);
     font-size: 1.5em;
     font-weight: bold;
     margin-bottom: 15px;
     text-align: center;
-    /* Borda Ciano Claro */
-    border-bottom: 1px solid rgba(13, 202, 240, 0.3); 
+    border-bottom: 1px solid var(--color-border);
     padding-bottom: 10px;
 }
 
 /* Área de Mensagens */
 .chatbot-content {
-    flex-grow: 1; 
-    overflow-y: auto; 
+    flex-grow: 1;
+    overflow-y: auto;
     padding: 15px;
-    /* Cor de Card */
-    border: 1px solid var(--color-dark-card); 
+    background-color: #F8F9FA;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     margin-bottom: 15px;
-    color: var(--color-light-text); /* Texto Secundário */
+    color: var(--color-text-main);
     text-align: left;
-    /* Scrollbar Ciano Claro */
-    scrollbar-color: var(--color-primary-accent) var(--color-dark-background); 
+    scrollbar-color: var(--color-primary) #F8F9FA;
     scrollbar-width: thin;
 }
 
 /* --- AVATAR E MENSAGEM DO BOT --- */
-
 .bot-message-wrapper {
-    display: flex; 
-    align-items: flex-end; 
+    display: flex;
+    align-items: flex-end;
     max-width: 90%;
     margin: 10px 0;
     text-align: left;
     animation: slideIn 0.3s ease-out;
 }
 
-.bot-message-wrapper.typing .message-balloon {
-    padding: 8px 12px;
-}
-
-.bot-message-wrapper.typing .message-balloon::after {
-    content: '...';
-    animation: typing 1s infinite;
-}
-
+/* Animações de digitação (mantidas) */
+.bot-message-wrapper.typing .message-balloon { padding: 8px 12px; }
+.bot-message-wrapper.typing .message-balloon::after { content: '...'; animation: typing 1s infinite; }
 @keyframes typing {
     0% { content: '.'; }
     33% { content: '..'; }
@@ -644,29 +543,29 @@ label {
 }
 
 .bot-avatar {
-    width: 30px; 
-    height: 30px;
-    border-radius: 50%; 
+    width: 30px; height: 30px;
+    border-radius: 50%;
     object-fit: cover;
-    margin-right: 8px; 
-    flex-shrink: 0; 
+    margin-right: 8px;
+    flex-shrink: 0;
 }
 
 .bot-message {
     padding: 10px;
-    background-color: var(--color-dark-card); /* Cor de Card para a mensagem do Bot */
-    border-radius: 15px 15px 15px 4px; 
-    word-break: break-word; 
+    background-color: #E9ECEF; /* Cinza claro para bot */
+    color: var(--color-text-main);
+    border-radius: 15px 15px 15px 4px;
+    word-break: break-word;
 }
 
 
-/* Estilo da Mensagem do Usuário (Simulada) */
+/* Estilo da Mensagem do Usuário */
 .user-message {
     max-width: 80%;
     padding: 10px;
-    margin: 10px 0 10px auto; 
-    background-color: var(--color-primary-accent); /* Ciano Claro para a mensagem do Usuário */
-    color: var(--color-dark-background); /* Texto Escuro para contraste */
+    margin: 10px 0 10px auto;
+    background-color: var(--color-primary);
+    color: #FFFFFF;
     border-radius: 15px 15px 0 15px;
     text-align: left;
     animation: slideIn 0.3s ease-out;
@@ -684,20 +583,19 @@ label {
     flex-grow: 1;
     padding: 10px;
     border-radius: 5px;
-    /* Cor de Card */
-    border: 1px solid var(--color-dark-card); 
-    background-color: rgba(0, 0, 0, 0.5);
-    color: var(--color-text-light);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-card-bg);
+    color: var(--color-text-main);
     font-size: 14px;
-    margin: 0; 
+    margin: 0;
 }
 
 #sendButton {
-    flex-shrink: 0; 
+    flex-shrink: 0;
     padding: 10px 15px;
-    margin: 0; 
-    background-color: var(--color-button-primary); /* Ciano Claro */
-    color: var(--color-dark-background); 
+    margin: 0;
+    background-color: var(--color-primary);
+    color: #FFFFFF;
     border-radius: 5px;
     font-weight: normal;
     width: auto;
@@ -711,10 +609,40 @@ label {
 
 .chatbot-footer .back-button {
     width: 100%;
-    background-color: var(--color-primary-accent); /* Ciano Claro */
-    color: var(--color-dark-background); 
+    background-color: var(--color-primary);
+    color: #FFFFFF;
 }
 
 .chatbot-footer .back-button:hover {
-    background-color: var(--color-button-hover);
+    background-color: var(--color-primary-dark);
+}
+
+/* --- AJUSTE DO ÍCONE NO LABEL (NOVO BLOCO) --- */
+
+/* Container para alinhar texto e ícone na mesma linha */
+.label-container {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente */
+    gap: 8px; /* Espaço entre o texto e a lupa */
+    margin-bottom: 5px;
+}
+
+/* Remove a margem padrão do label para o container controlar */
+.label-container label {
+    margin-bottom: 0; 
+}
+
+/* Estilo do link do ícone */
+.icon-link {
+    color: var(--color-primary); /* Usa o Azul do tema */
+    display: flex; /* Remove espaços extras abaixo do ícone */
+    text-decoration: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+    cursor: pointer;
+}
+
+/* Efeito ao passar o mouse na lupa */
+.icon-link:hover {
+    transform: scale(1.2); /* Aumenta levemente */
+    color: var(--color-primary-dark); /* Escurece o azul */
 }

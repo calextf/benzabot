@@ -305,7 +305,8 @@ function changePage(nextPage) {
         }
         
         if (nextPage === 3) {
-            updateStarDisplay(); // <-- Inicializa as estrelas
+            initStars();
+            setTimeout(() => updateStarDisplay(), 50);
         }
 
     }, 500); 
