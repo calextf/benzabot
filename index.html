@@ -3,170 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BenzaBot: Orquestrador de Respostas Institucionais</title>
+    <title>BenzaBot - Atendimento Acadêmico</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
-    <base target="_top">
+
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        .page-container { overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
+        
+        /* CORREÇÃO CRÍTICA: Z-Index e Cor Verde para Sucesso */
+        #flashMessage { 
+            z-index: 10000 !important; 
+            background-color: #22c55e !important; /* Green-500 (Tailwind) */
+        }
+    </style>
 </head>
-<body>
+<body class="bg-secondary-color h-screen w-screen overflow-hidden flex flex-col font-sans">
 
-    <div id="loadingOverlay">
-        <div class="spinner"></div>
-    </div>
+    <div id="flashMessage" role="alert" class="pointer-events-none fixed top-5 left-1/2 transform -translate-x-1/2"></div>
 
-    <div id="chatBotOverlay">
-        <div id="chatbotContainer" class="chatbot-container">
-            <div id="chatHomeButton" class="internal-nav-button" 
-                 onclick="closeChatBotAndGoHome()" 
-                 style="position: absolute; top: 15px; left: 15px; color: var(--color-primary-accent); z-index: 60;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.909 7.788A.5.5 0 0 0 1.273 8H2v7a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-4H11v4a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5V8h.727a.5.5 0 0 0 .364-.212L8.707 1.5z"/>
-                </svg>
+    <div id="main-app" class="relative flex flex-col h-full w-full">
+        
+        <header class="flex-none flex items-center justify-between p-4 bg-white shadow-md z-40 relative h-16 sm:h-auto">
+            <button onclick="toggleSidebar()" class="text-gray-700 hover:text-cyan-600 transition p-1 focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+            <div class="flex items-center space-x-2 absolute left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+                <span class="text-lg sm:text-xl font-bold text-gray-800 hidden sm:inline">Secretaria Acadêmica</span>
+                <span class="text-lg sm:text-xl font-bold text-gray-800 sm:hidden">Sec. Acad.</span>
+                <span class="text-lg sm:text-xl font-bold text-cyan-600">UniCesumar</span>
+            </div>
+            <div class="w-8"></div> 
+        </header>
+
+        <aside id="sidebar" class="fixed inset-y-0 left-0 bg-white shadow-2xl w-64 md:w-80 p-6 transition-transform duration-300 transform -translate-x-full z-50 flex flex-col">
+            <div class="flex justify-between items-center mb-8 border-b pb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Menu</h2>
+                <button onclick="toggleSidebar()" class="text-gray-500 hover:text-red-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <nav class="space-y-2">
+                <button onclick="changePage(1)" class="nav-item w-full flex items-center p-3 text-lg font-medium text-gray-700 rounded-lg hover:bg-cyan-50 hover:text-cyan-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 text-cyan-600"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Página Inicial
+                </button>
+                <button onclick="changePage(2)" class="nav-item w-full flex items-center p-3 text-lg font-medium text-gray-700 rounded-lg hover:bg-cyan-50 hover:text-cyan-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 text-cyan-600"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg> Estilizador
+                </button>
+                <button onclick="openGlossary()" class="nav-item w-full flex items-center p-3 text-lg font-medium text-gray-700 rounded-lg hover:bg-cyan-50 hover:text-cyan-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 text-cyan-600"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> Glossário de Tags
+                </button>
+                <button onclick="openChatBot()" class="nav-item w-full flex items-center p-3 text-lg font-medium text-gray-700 rounded-lg hover:bg-cyan-50 hover:text-cyan-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 text-cyan-600"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Chat
+                </button>
+            </nav>
+            <div class="mt-auto pt-6 border-t text-xs text-gray-400">
+                <p>Versão 1.0.3 (UI Fixes)</p>
+            </div>
+        </aside>
+
+        <main class="content-area flex-grow relative overflow-hidden bg-secondary-color w-full">
+            
+            <div id="page1" class="page-container flex flex-col items-center justify-center p-4 sm:p-6 text-center w-full h-full">
+                <div class="max-w-md w-full bg-white/50 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-sm border border-white/60">
+                    <div class="bg-cyan-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-cyan-600"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 12V8"/><path d="M12 16h.01"/></svg>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-3 tracking-tight">BenzaBot</h1>
+                    <p class="text-gray-600 mb-8 text-base sm:text-lg leading-relaxed">Estilização à sua disposição!<br><span class="text-sm text-gray-500">Contexto • Inteligência • Padronização</span></p>
+                    <div class="space-y-3 sm:space-y-4">
+                        <button onclick="changePage(2)" class="main-action-button w-full px-6 py-3.5 bg-cyan-600 text-white text-lg font-semibold rounded-xl shadow-lg shadow-cyan-500/30 hover:bg-cyan-700 transition-all focus:outline-none focus:ring-4 focus:ring-cyan-300">Iniciar Atendimento</button>
+                        <button onclick="openChatBot()" class="main-action-button w-full px-6 py-3.5 bg-white text-cyan-600 text-lg font-semibold rounded-xl border-2 border-cyan-600 hover:bg-cyan-50 transition-all focus:outline-none">Em construção...</button>
+                    </div>
+                    <div id="typewriter-text" class="mt-6 text-xs text-gray-400 h-4 mx-auto"></div>
+                </div>
             </div>
 
-            <div class="chatbot-header">
-                BenzaBot
+            <div id="page2" class="page-container flex flex-col items-center justify-start md:justify-center p-2 sm:p-6 w-full h-full overflow-y-auto">
+                <div class="w-full max-w-4xl mx-auto my-auto pb-4 pt-10 md:pt-0">
+                    <div class="bg-white rounded-2xl shadow-xl w-full relative p-6 sm:p-8"> 
+                        <button onclick="changePage(1)" class="absolute top-4 left-4 p-2 text-gray-400 hover:text-cyan-600 transition rounded-full hover:bg-gray-100" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></button>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center mt-2">Orquestrador de Respostas Institucionais</h2>
+                        <form onsubmit="event.preventDefault(); loadAndChangePage(3);" class="space-y-5"> 
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div class="form-field">
+                                    <label for="equipe" class="block text-sm font-semibold text-gray-700 mb-1">Equipe <span class="text-red-500">*</span></label>
+                                    <input type="text" id="equipe" list="listaEquipes" class="w-full rounded-lg border border-gray-300 p-3 shadow-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:outline-none transition-all" placeholder="Selecione..." required autocomplete="off">
+                                    <datalist id="listaEquipes"><option value="EDUCACAO_CONTINUADA"><option value="EMISSAO"><option value="INGRESSO"><option value="VALIDACAO"></datalist>
+                                </div>
+                                <div class="form-field">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <label for="tags" class="block text-sm font-semibold text-gray-700">Tags <span class="text-red-500">*</span></label>
+                                        <button type="button" onclick="openGlossary()" class="text-cyan-600 text-xs hover:underline flex items-center focus:outline-none">Consultar Glossário de Tags <svg class="ml-1 w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"/></svg></button>
+                                    </div>
+                                    <input type="text" id="tags" class="w-full rounded-lg border border-gray-300 p-3 shadow-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:outline-none transition-all" placeholder="Ex: HistoricoAtivo, RequisitosConclusao" required>
+                                </div>
+                            </div>
+                            <div class="form-field"><label for="perguntaAluno" class="block text-sm font-semibold text-gray-700 mb-1">Pergunta do Aluno(a) <span class="text-red-500">*</span></label><textarea id="perguntaAluno" rows="4" class="w-full rounded-lg border border-gray-300 p-3 shadow-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:outline-none transition-all resize-y" placeholder="Cole aqui a mensagem recebida..." required></textarea></div>
+                            <div class="border-t border-gray-100 my-4"></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                                <div class="form-field"><label for="protocolo" class="block text-sm font-semibold text-gray-700 mb-1">Protocolo <span class="text-red-500">*</span></label><input type="text" id="protocolo" oninput="filterProtocol(this)" class="w-full rounded-lg border border-gray-300 p-3 shadow-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:outline-none" placeholder="Apenas números" required maxlength="20" inputmode="numeric"></div>
+                                <div class="form-field"><label for="tom" class="block text-sm font-semibold text-gray-700 mb-1">Tom</label><input type="text" id="tom" class="w-full rounded-lg border border-gray-300 p-3 shadow-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:outline-none" placeholder="Ex: Acolhedor"></div>
+                                <div class="form-field"><label for="sazonalidade" class="block text-sm font-semibold text-gray-700 mb-1">Sazonalidade</label><input type="text" id="sazonalidade" class="w-full rounded-lg border border-gray-300 p-3 shadow-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 focus:outline-none" placeholder="Ex: Rematrícula"></div>
+                            </div>
+                            <div class="pt-6"><button type="submit" class="main-action-button w-full px-6 py-4 bg-gradient-to-r from-cyan-600 to-cyan-700 text-white text-lg font-bold rounded-xl shadow-lg shadow-cyan-500/40 hover:from-cyan-700 hover:to-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 transform transition hover:-translate-y-1">Estilizar Resposta</button></div>
+                        </form>
+                    </div>
+                    <div class="h-8 md:h-0"></div>
+                </div>
             </div>
-            <div id="chatContent" class="chatbot-content">
+
+            <div id="page3" class="page-container flex flex-col items-center justify-start md:justify-center p-4 sm:p-6 w-full h-full overflow-y-auto">
+                <div class="max-w-3xl w-full mx-auto my-auto bg-white rounded-2xl shadow-xl p-6 sm:p-8 pt-10 md:pt-8">
+                    <div class="text-center mb-6">
+                        <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-100 text-green-600 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+                        <h2 class="text-2xl font-bold text-gray-800"></h2>
+                    </div>
+                    <div class="shadow-inner rounded-xl overflow-hidden border border-gray-200 mb-6">
+                        <div class="bg-gray-100 p-2 flex justify-between items-center border-b border-gray-200">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider ml-2">Resposta Estilizada</span>
+                            <div class="flex items-center">
+                                <span id="copyMessage" class="mr-3 text-green-600 text-xs font-bold opacity-0 transition-opacity duration-300 pointer-events-none">Copiado com sucesso!</span>
+                                <button onclick="copyResponse()" class="flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg shadow-sm transition text-sm font-medium text-gray-700" title="Copiar Texto"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copiar</button>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 p-5 max-h-[40vh] md:max-h-[50vh] overflow-y-auto">
+                            <pre id="responseBox" class="whitespace-pre-wrap break-words font-mono text-sm text-gray-700 leading-relaxed">Aguardando estilização...</pre>
+                        </div>
+                    </div>
+                    <div class="border-t pt-6 text-center">
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Avalie a Qualidade da Resposta</h3>
+                        <div id="starContainer" class="flex justify-center space-x-3 mb-4"></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+                        <button onclick="changePage(1)" class="w-full py-3 text-gray-600 font-medium hover:text-cyan-600 hover:bg-gray-50 rounded-xl transition order-2 sm:order-1 border border-transparent hover:border-gray-200">Voltar ao Início</button>
+                        <button onclick="changePage(2)" class="main-action-button w-full py-3 bg-cyan-600 text-white font-semibold rounded-xl hover:bg-cyan-700 shadow-lg shadow-cyan-500/30 transition order-1 sm:order-2">Gerar Nova Resposta</button>
+                    </div>
+                </div>
+                <div class="h-8 md:h-0"></div>
             </div>
-            <div class="chatbot-footer">
-                <div class="chatbot-input">
-                    <input type="text" id="chatInput" placeholder="Digite sua dúvida aqui..." onkeypress="if(event.keyCode == 13) simulateUserMessage()">
-                    <button type="button" id="sendButton" onclick="simulateUserMessage()">Enviar</button>
+        </main>
+        
+        <footer class="flex-none p-3 bg-white border-t border-gray-200 text-center text-xs text-gray-400 z-40 hidden sm:block">
+            &copy; 2025 BenzaBot — Desenvolvido por Caio Alexandre Toledo de Faria | Formulário — Vitor de Souza Jorge Capoia
+        </footer>
+        
+        <div id="loadingOverlay" class="fixed inset-0 hidden items-center justify-center z-[60] bg-white/80 backdrop-blur-sm" style="display: none;">
+            <div class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-2xl border border-gray-100">
+                <div class="spinner border-4 border-gray-200 border-t-cyan-600 rounded-full w-12 h-12 animate-spin mb-4"></div>
+                <p class="text-gray-800 font-semibold text-lg animate-pulse">Processando...</p>
+                <p class="text-xs text-gray-500 mt-2">Consultando bases e estilizando</p>
+            </div>
+        </div>
+        
+        <div id="chatBotOverlay" class="fixed inset-0 flex items-center justify-center z-[9999] bg-black/60 backdrop-blur-sm transition-opacity opacity-0 pointer-events-none" style="display: none;">
+            <div id="chatbotContainer" class="bg-white w-[95%] max-w-md h-[80vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transform scale-95 transition-all duration-300 relative">
+                
+                <div class="p-4 bg-cyan-600 text-white flex justify-between items-center shadow-md shrink-0">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <h3 class="text-lg font-bold">BenzaBot</h3>
+                    </div>
+                    <button onclick="closeChatBotAndGoHome()" class="p-2 rounded-full hover:bg-white/20 transition focus:outline-none focus:ring-2 focus:ring-white/50 cursor-pointer z-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+                
+                <div id="chatContent" class="flex-grow overflow-y-auto p-6 bg-gray-50 flex flex-col items-center justify-center text-center">
+                    <div class="bg-yellow-100 p-4 rounded-full mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="orange" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" x2="12" y1="18" y2="18"/><line x1="12" x2="12" y1="12" y2="15"/></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-700 mb-2">Em Construção</h3>
+                    <p class="text-gray-500 text-sm">A funcionalidade de chat interativo está sendo preparada para melhor atendê-lo.</p>
+                </div>
+                
+                <div class="p-3 border-t bg-gray-100 shrink-0 pb-6 sm:pb-3 opacity-60 cursor-not-allowed"> 
+                    <div class="flex items-center gap-2">
+                        <input type="text" disabled placeholder="Chat indisponível no momento..." class="flex-grow p-3 border border-gray-300 rounded-full bg-gray-200 text-sm shadow-sm cursor-not-allowed">
+                        <button disabled class="p-3 bg-gray-400 text-white rounded-full cursor-not-allowed">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="11" y1="2" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="menuToggle" onclick="toggleSidebar()">
-        <span class="hamburger-icon"></span>
-        <span class="hamburger-icon"></span>
-        <span class="hamburger-icon"></span>
-    </div>
-
-    <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <img src="https://drive.google.com/thumbnail?id=1SZalmkT2jX53_LYXMuGiVpLjPmNjWlxK&sz=w1000"
-                 alt="Logo da Secretaria Acadêmica Unicesumar"
-                 class="sidebar-logo">
-        </div>
-        <div class="sidebar-menu">
-            <a href="#" onclick="openChatBot(); return false;">ChatBot</a>
-        </div>
-    </div>
-    
-    <div id="page1" class="page-container active" onclick="changePage(2)">
-        <div id="homeHeader">
-            <img src="https://drive.google.com/thumbnail?id=1F-gb-vUWTzlVIQyfqNOiIFsGPxc_j2d6&sz=w1000" 
-                 alt="Avatar do BenzaBot" 
-                 id="botImage">
-            <div id="titleContainer">
-                <h1 id="mainTitle" class="spooky-glow">BenzaBot</h1>
-                <p id="subtitleHome">Orquestrador de Respostas Institucionais</p>
+        <div id="glossaryOverlay" class="fixed inset-0 flex items-center justify-center z-[9999] bg-black/60 backdrop-blur-sm transition-opacity opacity-0 pointer-events-none" style="display: none;">
+            <div id="glossaryContainer" class="bg-white w-[95%] max-w-md h-[80vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transform scale-95 transition-all duration-300 relative">
+                <div class="p-4 bg-cyan-600 text-white flex justify-between items-center shadow-md shrink-0">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></div>
+                        <h3 class="text-lg font-bold">Glossário de Tags</h3>
+                    </div>
+                    <button type="button" onclick="closeGlossary()" class="p-2 rounded-full hover:bg-white/20 transition focus:outline-none focus:ring-2 focus:ring-white/50 cursor-pointer z-50"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                </div>
+                <div class="p-3 bg-gray-50 border-b border-gray-200 shrink-0">
+                    <div class="relative">
+                        <input type="text" id="glossarySearch" oninput="filterTags(this.value)" placeholder="Buscar tag (ex: histórico)..." class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3 top-2.5 text-gray-400"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </div>
+                </div>
+                <div id="glossaryContent" class="flex-grow overflow-y-auto p-4 bg-white space-y-3">
+                    <div class="text-center text-gray-500 mt-10">
+                        <div class="spinner border-4 border-gray-200 border-t-cyan-600 rounded-full w-8 h-8 animate-spin mx-auto mb-2"></div>
+                        <p class="text-sm">Carregando tags...</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <div style="margin-top: 30px;">
-            <p style="font-size: 1.1em; color: var(--color-vitru-info); font-weight: bold;">
-                CLIQUE PARA INICIAR O REGISTRO DE ATENDIMENTO
-            </p>
-        </div>
-    </div>
 
-    <div id="page2" class="page-container">
-        
-        <div id="homeButton" class="internal-nav-button" onclick="changePage(1)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.909 7.788A.5.5 0 0 0 1.273 8H2v7a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-4H11v4a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5V8h.727a.5.5 0 0 0 .364-.212L8.707 1.5z"/>
-            </svg>
-        </div>
-
-        <div id="benzaBotHeader" class="form-field">
-            <h2 id="benzaBotTitle" class="spooky-glow">BenzaBot</h2>
-        </div>
-        <p id="benzaBotSubtitle" class="form-field">A inteligência a serviço da sua rotina.</p>
-        
-        <div class="form-field">
-            <label for="protocolo">Protocolo<span class="required-star">*</span></label>
-            <input type="text" 
-                    id="protocolo" 
-                    placeholder="Ex: 202501-123456"
-                    oninput="filterProtocol(this)"
-                    inputmode="numeric" 
-                    pattern="\d*">
-        </div>
-        
-        <div class="form-field">
-            <label for="perguntaAluno">Pergunta do Aluno(a)<span class="required-star">*</span></label>
-            <textarea id="perguntaAluno" rows="4" placeholder="Ex: Qual o prazo para solicitação de revisão de nota?"></textarea>
-        </div>
-        
-        <div class="form-field">
-            <div class="label-container">
-                <label for="tags">Tags (separadas por vírgulas)</label>
-                
-                <a href="https://www.seulinkexterno.com.br" target="_blank" class="icon-link" title="Consultar Glossário de Tags">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                    </svg>
-                </a>
-            </div>
-            
-            <input type="text" id="tags" placeholder="Ex: revisão, nota, prazo">
-        </div>
-        <div class="form-field">
-            <label for="sazonalidade">Sazonalidade</label>
-            <input type="text" id="sazonalidade" placeholder="Ex: final_de_semestre, período_de_provas">
-        </div>
-
-        <div class="form-field">
-            <label for="tom">Tom</label>
-            <input type="text" id="tom" placeholder="Ex: educado, formal, urgente">
-        </div>
-
-       <div class="form-field">
-            <label for="equipe">Equipes (Separadas por vírgulas)</label>
-            <input type="text" id="equipe" placeholder="Ex: EMISSAO, VALIDACAO" list="listaEquipes" multiple autocomplete="off">
-            
-            <datalist id="listaEquipes">
-                <option value="EMISSAO">
-                <option value="VALIDACAO">
-                <option value="INGRESSO">
-                <option value="EDUCACAO_CONTINUADA">
-            </datalist>
-        </div>
-        
-        <button type="button" onclick="loadAndChangePage(3)" class="form-field">Gerar Resposta</button>
-    </div>
-
-    <div id="page3" class="page-container">
-        
-        <button type="button" id="backToFormButton" class="internal-nav-button" onclick="changePage(2)">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7 7-7m7 7H3" />
-            </svg>
-        </button>
-        
-        <h2 class="spooky-glow">Resposta Estilizada. ✅</h2>
-        
-        <div id="responseBox">
-            Aguardando o processamento...
-        </div>
-
-        <div style="display: flex; justify-content: center; position: relative;">
-            <button type="button" id="copyButton" onclick="copyResponse()">COPIAR RESPOSTA</button>
-            <div id="copyMessage">Texto Copiado!</div>
-        </div>
-
-        <h3 style="margin-top: 30px; margin-bottom: 10px; font-weight: bold; color: var(--color-text-light);">Qual a qualidade da resposta?</h3>
-        <div id="starContainer" 
-             style="display: flex; justify-content: center; gap: 5px;">
-        </div>
-        
-    </div>
-
-    <div class="footer-signature">
-        <span id="typewriter-text">© 2025 BenzaBot — Desenvolvido por Caio Alexandre Toledo de Faria | Formulário — Vitor de Souza Jorge Capoia</span>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Lógica de Controle de Modais (Para teste sem conectar ao Azure)
+        const originalOpenChat = window.openChatBot;
+        window.openChatBot = function() {
+            const overlay = document.getElementById('chatBotOverlay');
+            const container = document.getElementById('chatbotContainer');
+            overlay.style.display = 'flex';
+            
+            setTimeout(() => {
+                overlay.classList.remove('pointer-events-none', 'opacity-0');
+                container.classList.remove('scale-95');
+                container.classList.add('scale-100');
+            }, 10);
+        };
+
+        const originalCloseChat = window.closeChatBotAndGoHome;
+        window.closeChatBotAndGoHome = function() {
+            const overlay = document.getElementById('chatBotOverlay');
+            const container = document.getElementById('chatbotContainer');
+            
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+            
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        };
+
+        const openGlossary = window.openGlossary;
+        window.closeGlossary = function() {
+            const overlay = document.getElementById('glossaryOverlay');
+            const container = document.getElementById('glossaryContainer');
+            
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+            
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        };
+    </script>
 </body>
 </html>
